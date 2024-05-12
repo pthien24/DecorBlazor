@@ -1,0 +1,153 @@
+﻿@page "/product/create"
+@page "/product/edit/{ID:int}"
+
+@inject IProductRepository _productRepository
+@inject ICategoryRepository _categoryRepository
+@inject NavigationManager _navigationManager
+@inject IFileUpload _fileservice
+@inject IJSRuntime _js
+<div class="row my-2">
+    <h3 class="card-title text-primary mb-3 ml-3 ">@Title Product</h3>
+    <div class="col-md-10">
+        <EditForm Model="Product" OnValidSubmit="UpsertProduct">
+            <DataAnnotationsValidator/>
+            @* <ValidationSummary/> *@
+            <div class="form-group">
+                <label>Name</label>
+                <InputText @bind-Value="Product.Name" class="form-control"></InputText>
+                <ValidationMessage For="()=>Product.Name"></ValidationMessage>
+            </div>
+            <div class="form-group">
+                <label>Color</label>
+                <InputText @bind-Value="Product.Color" class="form-control"></InputText>
+                <ValidationMessage For="()=>Product.Color"></ValidationMessage>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <SfRichTextEditor @bind-Value="Product.Description" class="form-control"></SfRichTextEditor>
+                <ValidationMessage For="()=>Product.Description"></ValidationMessage>
+            </div>
+            <div class="row pt-3">
+                <div class="form-group col-6">
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="Product.ShopFavorites" class="form-check-input"></InputCheckbox>
+                        <label class="form-check-label">ShopFavorites</label>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <div class="form-check">
+                        <InputCheckbox @bind-Value="Product.CustommerFavorites" class="form-check-input"></InputCheckbox>
+                        <label class="form-check-label">CustommerFavorites</label>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                        <label >Category</label>
+                        <InputSelect @bind-Value="Product.CategoryId" class="form-select">
+                            <option value="0" disabled selected>---Select Category---</option>
+                            @foreach (var c in Categories)
+                            {
+                                <option value="@c.ID">@c.Name</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="()=>Product.CategoryId"></ValidationMessage>
+
+                </div>
+
+                <div class="form-group col-6">
+                    <InputFile OnChange="HandleUploadImage"></InputFile>
+                </div>
+            </div>
+
+           
+            <div class="form-group py-2">
+                <button class="btn btn-primary">@Title</button>
+                <NavLink href="product" class="btn btn-secondary">Back To Index</NavLink>
+            </div>
+        </EditForm>
+    </div>
+    <div class="col-md-2">
+        <img src="@Product.ImageUrl" class="w-100"/>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int ID { get; set; } 
+    private ProductDTO Product { get; set; } = new ()
+    {
+        ImageUrl = "/images/default.png"
+    };
+    private IEnumerable<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
+
+    private string? Title { get; set; } = "Create";
+    private bool IsLoading { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstrender)
+    {
+        if (firstrender)
+        {
+            await LoadProduct();
+        }
+    }
+    private async Task LoadProduct()
+    {
+        IsLoading = true;
+        StateHasChanged();
+        Categories = await _categoryRepository.GetAll();
+        if (ID != 0 )
+        {
+            Title = "Edit";
+            Product = await _productRepository.Get(ID);
+        }
+        IsLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task UpsertProduct()
+    {
+        if (Product.ID == 0)
+        {
+            await _productRepository.Create(Product);
+        }
+        else
+        {
+            await _productRepository.Update(Product);
+        }
+        _navigationManager.NavigateTo("product");
+
+    }
+    private async void HandleUploadImage(InputFileChangeEventArgs e)
+    {
+        IsLoading = true;
+        try
+        {
+            if (e.GetMultipleFiles().Count > 0)
+            {
+                foreach (var file in e.GetMultipleFiles())
+                {
+                    System.IO.FileInfo fileInfo = new System.IO.FileInfo(file.Name);
+
+                    if (fileInfo.Extension.ToLower() == ".jpg" ||
+                    fileInfo.Extension.ToLower() == ".png"  ||
+                    fileInfo.Extension.ToLower() == ".jpeg")
+                    {
+                        Product.ImageUrl = await _fileservice.UploadFile(file);
+                    }
+                    else
+                    {
+                        await _js.ToastrError("Please select jpg jpeg png");
+                        return;
+                    }
+                }
+            }
+            IsLoading = false;
+        }
+        catch (Exception err)
+        {
+
+            await _js.ToastrError(err.Message);
+        }
+    }
+}

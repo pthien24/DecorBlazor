@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecorWeb_Server", "DecorWeb_Server\DecorWeb_Server.csproj", "{6AB7FCEF-8A19-49E8-B60D-D08F8467AA40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecorWeb_Server", "DecorWeb_Server\DecorWeb_Server.csproj", "{6AB7FCEF-8A19-49E8-B60D-D08F8467AA40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecorWeb_client", "DecorWeb_client\DecorWeb_client.csproj", "{4135C832-BED3-4274-9538-C306C1F86311}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decor_Models", "Decor_Models\Decor_Models.csproj", "{48C7AA17-2D20-47B2-A2E5-CACA06D3A889}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decor_DataAccess", "Decor_DataAccess\Decor_DataAccess.csproj", "{9CB02DBA-804C-40A5-AD96-EDA0BBB938D2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decor_Common", "Decor_Common\Decor_Common.csproj", "{854DE4A9-C43A-45A4-8ACD-B5A5C4523D2A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decor_Business", "Decor_Business\Decor_Business.csproj", "{7947477C-EE7A-4471-A9A4-DAC34B6D6A27}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecorWeb.API", "DecorWeb.API\DecorWeb.API.csproj", "{A59DB9D2-1BCB-47D1-8FDE-9BD072E88F22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +27,30 @@ Global
 		{6AB7FCEF-8A19-49E8-B60D-D08F8467AA40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AB7FCEF-8A19-49E8-B60D-D08F8467AA40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AB7FCEF-8A19-49E8-B60D-D08F8467AA40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4135C832-BED3-4274-9538-C306C1F86311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4135C832-BED3-4274-9538-C306C1F86311}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4135C832-BED3-4274-9538-C306C1F86311}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4135C832-BED3-4274-9538-C306C1F86311}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48C7AA17-2D20-47B2-A2E5-CACA06D3A889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48C7AA17-2D20-47B2-A2E5-CACA06D3A889}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48C7AA17-2D20-47B2-A2E5-CACA06D3A889}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48C7AA17-2D20-47B2-A2E5-CACA06D3A889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CB02DBA-804C-40A5-AD96-EDA0BBB938D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CB02DBA-804C-40A5-AD96-EDA0BBB938D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CB02DBA-804C-40A5-AD96-EDA0BBB938D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CB02DBA-804C-40A5-AD96-EDA0BBB938D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{854DE4A9-C43A-45A4-8ACD-B5A5C4523D2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{854DE4A9-C43A-45A4-8ACD-B5A5C4523D2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{854DE4A9-C43A-45A4-8ACD-B5A5C4523D2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{854DE4A9-C43A-45A4-8ACD-B5A5C4523D2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7947477C-EE7A-4471-A9A4-DAC34B6D6A27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7947477C-EE7A-4471-A9A4-DAC34B6D6A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7947477C-EE7A-4471-A9A4-DAC34B6D6A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7947477C-EE7A-4471-A9A4-DAC34B6D6A27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A59DB9D2-1BCB-47D1-8FDE-9BD072E88F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A59DB9D2-1BCB-47D1-8FDE-9BD072E88F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A59DB9D2-1BCB-47D1-8FDE-9BD072E88F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A59DB9D2-1BCB-47D1-8FDE-9BD072E88F22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

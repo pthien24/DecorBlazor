@@ -1,0 +1,77 @@
+﻿@page "/learnblazor/demoproducts"
+@using Decor_Models.LearnBlazor_models;
+
+
+<h3 class="text-primary">DemoProducts</h3>
+
+<p>Farovites Total: @SelectedFavoriteCount</p>
+
+<p>last seen : @LastSelectProduct</p>
+<div class="border p-2 mt-2" style="background-color:azure">
+    <div class="row">
+        @foreach (var prod in Products)
+        {
+            <_IndividuaProduct Product="prod" OnFavovitesUpdated="FaroviteCountUpdated" OnLastSelectedProduct="LastSelectedProduct">
+                <FirstFragment>#1</FirstFragment>
+                <SecondFragment>#2</SecondFragment>
+            </_IndividuaProduct>
+        }
+    </div>
+</div>
+
+
+
+@code {
+    List<Demo_Product> Products = new();
+
+    private int SelectedFavoriteCount { get; set; } = 0;
+    private string LastSelectProduct { get; set; } = string.Empty;
+
+    protected void FaroviteCountUpdated(bool selected)
+    {
+        if (selected)
+        {
+            SelectedFavoriteCount++;
+        }else
+        {
+            SelectedFavoriteCount--;
+        }
+    }
+    protected void LastSelectedProduct(string name)
+    {
+        LastSelectProduct = name;
+    }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Products.Add(new()
+            {
+                Id = 1,
+                Name = "Midnight blaze",
+                Price = 10.99,
+                IsActive = false,
+                ProductProp = new List<Demo_ProductProp>
+            {
+                new Demo_ProductProp {Id = 1, Key = "color",Value="Burble"},
+                new Demo_ProductProp {Id = 2, Key = "Flavor",Value="Rose"},
+                new Demo_ProductProp {Id = 3, Key = "Size",Value="20oz"}
+            }
+
+            });
+
+        Products.Add(new()
+            {
+                Id = 1,
+                Name = "Blossom lily",
+                Price = 10.99,
+                IsActive = true,
+                ProductProp = new List<Demo_ProductProp>
+            {
+                new Demo_ProductProp {Id = 1, Key = "color",Value="White"},
+                new Demo_ProductProp {Id = 2, Key = "Flavor",Value="lily"},
+                new Demo_ProductProp {Id = 3, Key = "Size",Value="18oz"}
+            }
+
+            });
+    }
+}

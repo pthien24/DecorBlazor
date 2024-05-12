@@ -1,0 +1,33 @@
+﻿@inject IJSRuntime _IJSRuntime
+<div>
+    <div class="alert alert-info">@Title</div>
+    <div class="alert alert-success">
+        @if (ChildContent != null)
+        {
+            <span>
+                @ChildContent
+            </span>
+        } else
+        {
+            <span>Hello, From empty render fragment</span>
+        }
+    </div>
+    <button class="btn btn-danger" @onclick="OnButtonClick">Button to be clicked</button>
+
+    <br />
+    <_GrandComponent MessageFromGrand="Thien "></_GrandComponent>
+</div>
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public EventCallback OnButtonClick { get; set; }
+
+    public async Task SweetSuccess()
+    {
+        await _IJSRuntime.Sweet2Success("Good job!");
+
+    }
+}

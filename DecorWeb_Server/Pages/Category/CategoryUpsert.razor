@@ -1,0 +1,72 @@
+﻿@page "/category/create"
+@page "/category/edit/{ID:int}"
+
+@inject ICategoryRepository _categoryRepository
+@inject NavigationManager _navigationManager
+<div class="row my-2">
+    <h3 class="card-title text-primary mb-3 ml-3 ">@Title Category</h3>
+    <div class="col-12">
+        <EditForm Model="Category" OnValidSubmit="UpsertCategory">
+            <DataAnnotationsValidator/>
+            @* <ValidationSummary/> *@
+            <div class="form-group">
+                <input type="text" name="ID" value="@ID"/>
+                <label>Name</label>
+                <InputText @bind-Value="Category.Name" class="form-control"></InputText>
+                <ValidationMessage For="()=>Category.Name"></ValidationMessage>
+            </div>
+            <br />
+            <div class="form-group py-2">
+                <button class="btn btn-primary">@Title</button>
+                <NavLink href="category" class="btn btn-secondary">Back To Index</NavLink>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int ID { get; set; } 
+    private CategoryDTO Category { get; set; } = new CategoryDTO();
+    private string? Title { get; set; } = "Create";
+    private bool IsLoading { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstrender)
+    {
+        if (firstrender)
+        {
+
+            if (ID == 0 )
+            {
+                IsLoading = false;
+            }else
+            {
+                Title = "Edit";
+                await LoadCategory();
+            }
+
+        }
+    }
+    private async Task LoadCategory()
+    {
+        IsLoading = true;
+        StateHasChanged();
+        Category = await _categoryRepository.Get(ID);
+        IsLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task UpsertCategory()
+    {
+        if (Category.ID == 0)
+        {
+            await _categoryRepository.Create(Category);
+        }
+        else
+        {
+            await _categoryRepository.Update(Category);
+        }
+        _navigationManager.NavigateTo("category");
+        
+    }
+}

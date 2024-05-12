@@ -1,0 +1,40 @@
+﻿<div class="bg-light border p-2 col-5" @onclick="(args)=>LastSelectedProduct(args,Product.Name)">
+    <h4 class="text-secondary">Product @Product.Id</h4>
+    <input type="checkbox" @onchange="FavovitesUpdated" /> Add to Favorite <br /> 
+    <br />
+    Name : @Product.Name <br />
+
+    <p>RF from Parent - @FirstFragment @SecondFragment</p>
+    Show Property : 
+    <input type="checkbox" @bind-value="Product.IsActive" checked="@(Product.IsActive?"Checked":null)" />
+
+    @if (Product.IsActive)
+    {
+        foreach (var property in Product.ProductProp)
+        {
+            <p>@property.Key - @property.Value</p>
+        }
+    }
+    <br />
+    <_EditDeleteButton IsActive="@Product.IsActive"></_EditDeleteButton>
+</div>
+@code {
+    [Parameter]
+    public Demo_Product? Product { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnFavovitesUpdated { get; set; }
+    [Parameter]
+    public EventCallback<string> OnLastSelectedProduct{ get; set; }
+    [Parameter]
+    public RenderFragment? FirstFragment { get; set; }
+    [Parameter]
+    public RenderFragment? SecondFragment { get; set; }
+    private async Task FavovitesUpdated(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        await OnFavovitesUpdated.InvokeAsync((bool)e.Value);
+    }
+    private async Task LastSelectedProduct(MouseEventArgs e, string Name)
+    {
+        await OnLastSelectedProduct.InvokeAsync(Name);
+    }
+}

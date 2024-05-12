@@ -1,0 +1,30 @@
+﻿@page "/learnblazor/ParentComponent"
+
+<h3>Parent Child Relation</h3>
+<_ChildComponent @ref="ChildeCompl" OnButtonClick="ShowMessage" Title="This Title is passed as parameter from parent companent">
+    <ChildContent>
+        The is second child compenent
+    </ChildContent>
+    
+</_ChildComponent>
+<p>@message</p>
+
+<_AnotherChildComponent InputAttributes="InputAttributesFParent"></_AnotherChildComponent>
+
+
+<div class="row">
+    <button class="btn btn-success" @onclick="()=>ChildeCompl.SweetSuccess()">sweet button</button>
+</div>
+@code {
+    private _ChildComponent? ChildeCompl;
+    public Dictionary<string, object> InputAttributesFParent { get; set; } = new Dictionary<string, object>()
+    {
+        {"required" , "required"},
+        {"placeholder","Enter name form parent 222"},
+        {"maxlength",5}
+    };
+    public string message = "";
+    private void ShowMessage(){
+        message = "button Clicked";
+    }
+}
