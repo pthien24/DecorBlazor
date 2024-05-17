@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decor_DataAccess
+namespace Decor_Models
 {
     public class OrderDetailsDTO
     {

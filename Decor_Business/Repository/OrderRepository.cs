@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Decor_Business.Repository.IRepository;
+using Decor_Common;
 using Decor_DataAccess;
 using Decor_DataAccess.Data;
 using Decor_DataAccess.ViewModel;
 using Decor_Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,37 +48,106 @@ namespace Decor_Business.Repository
 
                 throw ex;
             }
-            return ObjDTO   ;
+            return ObjDTO;
         }
 
-        public Task<int> Delete(int id)
+        public async Task<int> Delete(int id)
         {
-            throw new NotImplementedException();
+            var objHeader = _Db.OrderHeader.FirstOrDefaultAsync(x => x.Id == id);
+            if (objHeader != null)
+            {
+                IEnumerable<OrderDetails> objDetails = _Db.OrderDetails.Where(x => x.OrderHeaderId == objHeader.Id);
+                _Db.RemoveRange(objDetails);
+                _Db.Remove(objHeader);
+                return _Db.SaveChanges();
+            }
+            return 0;
         }
 
-        public Task<OrderDTO> Get(int id)
+        public async Task<OrderDTO> Get(int id)
         {
-            throw new NotImplementedException();
+            Order order = new()
+            {
+                OrderHeader = _Db.OrderHeader.FirstOrDefault(x => x.Id == id),
+                OrderDetails = _Db.OrderDetails.Where(x => x.OrderHeaderId == id)
+            };
+            if (order != null)
+            {
+                return _Mp.Map<Order, OrderDTO>(order);
+            }
+            return new OrderDTO();
+
         }
 
-        public Task<IEnumerable<OrderDTO>> GetAll(string? userId = null, string status = null)
+        public async Task<IEnumerable<OrderDTO>> GetAll(string? userId = null, string? status = null)
         {
-            throw new NotImplementedException();
+            List<Order> OrderFormDB = new List<Order>();
+            IEnumerable<OrderDetails> orderDetailsList = _Db.OrderDetails;
+            IEnumerable<OrderHeader> orderHeadersList= _Db.OrderHeader;
+            if (userId != null)
+            {
+                orderHeadersList = orderHeadersList.Where(x => x.UserId == userId);
+            }
+            if (status != null)
+            {
+                orderHeadersList = orderHeadersList.Where(x => x.Status == status);
+            }
+            foreach (OrderHeader header in orderHeadersList)
+            {
+                Order order = new()
+                {
+                    OrderHeader = header,
+                    OrderDetails =orderDetailsList.Where(x => x.OrderHeaderId==  header.Id)
+                };
+                OrderFormDB.Add(order);
+
+            }
+            return _Mp.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(OrderFormDB);
+
         }
 
-        public Task<OrderHeaderDTO> MarkPaymentSuccesfull(int Id)
+        public async Task<OrderHeaderDTO> MarkPaymentSuccesfull(int Id)
         {
-            throw new NotImplementedException();
+            var data = await _Db.OrderHeader.FindAsync(Id);
+            if (data == null)
+            {
+                return new OrderHeaderDTO();
+            }
+            if (data.Status == SD.Status_Pending)
+            {
+                data.Status = SD.Status_Confirmed;
+                await _Db.SaveChangesAsync();
+                return _Mp.Map<OrderHeader, OrderHeaderDTO>(data);
+            }
+            return new OrderHeaderDTO();
         }
 
-        public Task<OrderHeaderDTO> UpdateHeader(OrderHeaderDTO orderHeader)
+        public async Task<OrderHeaderDTO> UpdateHeader(OrderHeaderDTO orderHeader)
         {
-            throw new NotImplementedException();
+            if (orderHeader != null)
+            {
+                var OrderHeader = _Mp.Map<OrderHeaderDTO, OrderHeader>(orderHeader);
+                _Db.OrderHeader.Update(OrderHeader);
+                await _Db.SaveChangesAsync();
+                return _Mp.Map<OrderHeader ,OrderHeaderDTO>(OrderHeader);
+            }
+            return new OrderHeaderDTO();
         }
 
-        public Task<bool> UpdateOrderStatus(int orderId, string status)
+        public async Task<bool> UpdateOrderStatus(int orderId, string status)
         {
-            throw new NotImplementedException();
+            var data = await _Db.OrderHeader.FindAsync(orderId);
+            if (data == null)
+            {
+                return false;
+            }
+            data.Status = status;
+            if (status == SD.Status_Shipped)
+            {
+                data.ShippingDate = DateTime.Now;
+            }
+            await _Db.SaveChangesAsync();
+            return true;
         }
     }
 }

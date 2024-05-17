@@ -8,19 +8,22 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.29" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.29">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.29" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.29" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.29">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.12" />
     <PackageReference Include="Syncfusion.Blazor.Grid" Version="25.1.40" />
     <PackageReference Include="Syncfusion.Blazor.RichTextEditor" Version="25.1.40" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="25.1.40" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Decor_Business\Decor_Business.csproj" />
-    <ProjectReference Include="..\Decor_DataAccess\Decor_DataAccess.csproj" />
-    <ProjectReference Include="..\Decor_Models\Decor_Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +37,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\Product\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Decor_Business\Decor_Business.csproj" />
   </ItemGroup>
 
 </Project>

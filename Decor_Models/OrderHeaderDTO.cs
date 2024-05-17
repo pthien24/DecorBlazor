@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decor_DataAccess
+namespace Decor_Models
 {
     public class OrderHeaderDTO
     {
@@ -40,6 +40,7 @@ namespace Decor_DataAccess
         [Display(Name = "Postal Code ")]
         [Required]
         public string PostalCode { get; set; }
+
 
     }
 }

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Decor_Common\Decor_Common.csproj" />
     <ProjectReference Include="..\Decor_DataAccess\Decor_DataAccess.csproj" />
     <ProjectReference Include="..\Decor_Models\Decor_Models.csproj" />
   </ItemGroup>

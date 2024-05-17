@@ -11,7 +11,7 @@ namespace Decor_Business.Repository.IRepository
     public interface IOrderRepository
     {
         public Task<OrderDTO> Get(int id);
-        public Task<IEnumerable<OrderDTO>> GetAll(string? userId = null, string status = null);
+        public Task<IEnumerable<OrderDTO>> GetAll(string? userId = null, string? status = null);
         public Task<OrderDTO> Create(OrderDTO OjbDTO);
 
         public Task<int> Delete(int id);
