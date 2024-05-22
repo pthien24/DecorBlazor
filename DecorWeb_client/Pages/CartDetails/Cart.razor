@@ -18,85 +18,86 @@ else
 }
     else
     {
-        <div class="container mt-4">
-            <div class="card">
-                <div class="card-header bg-dark text-light ml-0 ">
-                    <div class="row">
-                        <div class="col-6  pt-2">
-                            Shopping Cart
-                        </div>
-                        <div class="col-6 col-md-3 offset-md-3 text-end">
-                            <a href="/" class="btn btn-outline-info form-control">Continue Shopping</a>
-                        </div>
-                    </div>
+
+        <section id="cart_items">
+            <div class="container">
+                <div class="breadcrumbs">
+                    <ol class="breadcrumb">
+                        <li><a href="#">Home</a></li>
+                        <li class="active">Shopping Cart</li>
+                    </ol>
                 </div>
-                <div class="card-body">
+                <div class="table-responsive cart_info">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr class="cart_menu">
+                                <td class="image">Item</td>
+                                <td class="description"></td>
+                                <td class="price">Price</td>
+                                <td class="quantity">Quantity</td>
+                                <td class="total">Total</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            @foreach (var item in ShoppingCart)
+                            {
 
+                                <tr>
+                                    <td class="col-3 col-md-1 text-center py-2">
+                                        <img src="@item.Product.ImageUrl" class="rounded" width="100%" />
+                                    </td>
+                                    <td class="cart_description">
+                                        <h4><a href="">@item.Product.Name</a></h4>
+                                    </td>
+                                    <td class="cart_price">
+                                        <h6><strong>@item.ProductPrice.Price.ToString("c") <span class="text-muted">x</span>@item.Count </strong></h6>
+                                    </td>
+                                    <td class="cart_quantity">
+                                        <div class="cart_quantity_button">
+                                            <button class="cart_quantity_up" type="submit" @onclick="()=>Increment(item.ProductId,item.ProductPriceId,1)"> + </button>
+                                            <button class="cart_quantity_down" type="submit" @onclick="()=>Decrement(item.ProductId,item.ProductPriceId,1)"> - </button>
+                                        </div>
+                                    </td>
+                                    <td class="cart_total">
+                                        <p class="cart_total_price">@OrderTotal.ToString("c")</p>
+                                    </td>
+                                    <td class="cart_quantity">
+                                        <div class="cart_quantity_button">
+                                            <button class="cart_quantity_down" type="submit" @onclick="()=>Decrement(item.ProductId,item.ProductPriceId,0)"> X </button>
+                                        </div>
 
+                                    </td>
+                                </tr>
 
-                    @foreach (var item in ShoppingCart)
-                    {
-                        <div class="row">
-                            <div class="col-3 col-md-1 text-center py-2">
-                                <img src="@item.Product.ImageUrl" class="rounded" width="100%" />
-                            </div>
-                            <div class="col-9 text-sm-center text-md-start col-md-4 pt-lg-1 ">
-                                <h4><strong>@item.Product.Name</strong></h4>
-
-                                <div class="badge bg-primary text-center" style="font-size:12px;">
-                                    @item.Product.Category.Name
-                                </div>
-                                <div class="badge bg-info text-center" style="font-size:12px;">
-                                    @item.Product.Color
-                                </div>
-                                <div><p>Size :  @item.ProductPrice.Size</p></div>
-                            </div>
-                            <div class="col-12 text-sm-center col-md-7 text-md-start row  pt-lg-3 mt-3">
-                                <div class="col-4 pt-1 ">
-
-                                    <h6><strong>@item.ProductPrice.Price.ToString("c") <span class="text-muted">x</span>@item.Count </strong></h6>
-                                </div>
-                                <div class="col-6 col-sm-4 col-lg-6">
-                                    <button type="submit" @onclick="()=>Increment(item.ProductId,item.ProductPriceId,1)" class="btn btn-primary">
-                                        <i class="bi bi-plus-square"></i>
-                                    </button>
-                                    <button type="submit" @onclick="()=>Decrement(item.ProductId,item.ProductPriceId,1)" class="btn btn-warning">
-                                        <i class="bi bi-dash-square"></i>
-                                    </button>
-                                </div>
-                                <div class="col-2 col-sm-4 col-lg-2 text-right">
-                                    <button type="submit" @onclick="()=>Decrement(item.ProductId,item.ProductPriceId,0)" class="btn btn-outline-danger">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                    }
-                    <hr />
-
-                    <div class="row">
-                        <div class="col-12 col-md-5">
-                        </div>
-                        <div class="col-12 col-md-6 offset-md-1 col-lg-4 offset-lg-3 pr-4">
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between bg-light">
-                                    <span class="text-info"> Total (USD)</span>
-                                    <strong class="text-info">@OrderTotal.ToString("c")</strong>
-                                </li>
+                            }
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section> <!--/#cart_items-->
+        <section id="do_action">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="total_area">
+                            <ul>
+                                <li>Cart Sub Total <span>$59</span></li>
+                                <li>Eco Tax <span>$2</span></li>
+                                <li>Shipping Cost <span>Free</span></li>
+                                <li>Total <span>$61</span></li>
                             </ul>
+                            <a class="btn btn-default update" href="/summary">Update</a>
+                            <a class="btn btn-default check_out" href="/summary">Check Out</a>
                         </div>
-                    </div>
-
-
-                </div>
-                <div class="card-footer">
-                    <div class="col-12  col-md-3 offset-md-9">
-                        <a href="/summary" class="btn btn-secondary form-control">Summary</a>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!--/#do_action-->
     }
 
 }
@@ -126,8 +127,7 @@ else
     }
     private async Task Increment(int productid, int productpriceId, int count)
     {
-        IsProcessing = true;
-
+        if (ShoppingCart == null) return;
         await _cartService.IncrementCart(new()
             {
                 Count = count,
@@ -135,13 +135,11 @@ else
                 ProductPriceId = productpriceId
             });
             await LoadData();
-        IsProcessing = false;
 
     }
     private async Task Decrement(int productid, int productpriceId, int count)
     {
-        IsProcessing = true;
-
+        if (ShoppingCart == null) return;
         await _cartService.DecrementCart(new()
             {
                 Count = count,
@@ -149,7 +147,6 @@ else
                 ProductPriceId = productpriceId
             });
         await LoadData();
-        IsProcessing = false;
 
     }
 }

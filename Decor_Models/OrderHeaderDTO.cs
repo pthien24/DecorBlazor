@@ -40,6 +40,11 @@ namespace Decor_Models
         [Display(Name = "Postal Code ")]
         [Required]
         public string PostalCode { get; set; }
+        [Display(Name = "Email")]
+        [Required]
+        public string Email { get; set; }
+        public string? Tracking { get; set; }
+        public string? Carrier { get; set; }
 
 
     }

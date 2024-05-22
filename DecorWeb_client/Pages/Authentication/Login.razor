@@ -1,0 +1,70 @@
+﻿@page "/login"
+@using System.Web
+@inject IAuthenticationService _authService
+@inject NavigationManager _navigation
+
+<section>
+    <div class="container">
+        <div class="col-sm-4 col-sm-offset-4">
+            <div class="login-form">
+                <EditForm Model="SignInRequest" OnValidSubmit="LoginUser">
+                    <DataAnnotationsValidator />
+                    <h3 class="col-12 text-success text-center py-2">
+                        <strong>Sign In</strong>
+                    </h3>
+
+                        @if (ShowRegistrationErrors)
+                        {
+                        <p class="text-center text-danger">@Errors</p>
+                        }
+
+
+                    <div class="py-2">
+                        <InputText @bind-Value="SignInRequest.UserName" id="email" placeholder="Email..." class="form-control mb-2" />
+                        <ValidationMessage For="(()=>SignInRequest.UserName)"></ValidationMessage>
+                    </div>
+                    <div class="py-2">
+                        <InputText @bind-Value="SignInRequest.Password" type="password" placeholder="Password..." id="password" class="form-control mb-2" />
+                        <ValidationMessage For="(()=>SignInRequest.Password)"></ValidationMessage>
+                    </div>
+                    <div class="py-2">
+                        <button type="submit" class="btn btn-success btn-block"><i class="bi bi-person-bounding-box"></i> Sign in</button>
+                        <a href="/registration" class="btn btn-primary text-white m-2"><i class="bi bi-person-plus-fill"></i> Register as a new user</a>
+                    </div>
+                </EditForm>
+
+            </div>
+        </div>
+    </div>
+</section>
+@code {
+    private SignInRequestDTO SignInRequest = new SignInRequestDTO();
+    private bool IsProcessing { get; set; } = false;
+    private bool ShowRegistrationErrors { get; set; } = false;
+    public string Errors { get; set; } =  string.Empty;
+    public string ReturnUrl { get; set; }
+    private async Task LoginUser()
+    {
+        ShowRegistrationErrors = false;
+
+        Errors = string.Empty;
+        
+            var result = await _authService.LoginUser(SignInRequest);
+            if (result.IsAuthSuccessful)
+            {
+                //registion is successsfull
+                var absoluteUri = new Uri(_navigation.Uri);
+                var quyryParam = HttpUtility.ParseQueryString(absoluteUri.Query);
+                ReturnUrl = quyryParam["returnUrl"];
+                _navigation.NavigateTo($"/{ReturnUrl}");
+            }
+            else
+            {
+                //failure
+                Errors = result.ErrorMessage;
+                ShowRegistrationErrors = true;
+            }
+        }
+
+    }
+}

@@ -10,92 +10,122 @@
 }
 else
 {
-    <EditForm OnValidSubmit="AddToCart" Model="DetailsVM" method="post">
-        <DataAnnotationsValidator />
-        <div class="card container mt-4">
-            <div class="card-header ml-0  row">
-                <div class="col-12 col-md-6">
-                    <h1 class="text-primary">@Product.Name</h1>
-                </div>
-
-                <div class="col-12 col-md-6 text-end pt-4">
-                    <span class="badge bg-info pt-2" style="height:30px;"> @Product.Category.Name</span>
-                    <span class="badge bg-warning pt-2" style="height:30px;"> @Product.Color</span>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="container rounded p-2">
-                    <div class="row">
-                        <div class="col-10">
-                            <p> .Description</p>
-                            <div class="row">
-                                @foreach (var productPrice in Product.ProductPrices)
-                                {
-                                    if (productPrice.ID == DetailsVM.SelectedProductPriceID)
-                                    {
-                                        <div class="col-2 bg-light text-center pt-2 m-2" style="border:3px solid #28A745; border-radius:10px;box-shadow:5px"
-                                        >
-                                            <p>@productPrice.Size</p>
-                                            <p>@productPrice.Price.ToString("c")</p>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="col-2 bg-light text-center pt-2 m-2" style="border:1px solid ; border-radius:10px;box-shadow:5px"
-                                             @onclick="(agrs) =>SelectProductPrice(agrs,productPrice.ID)">
-                                            <p>@productPrice.Size</p>
-                                            <p>@productPrice.Price.ToString("c")</p>
-                                        </div>
-                                    }
-
-                                }
-
-                            </div>
-                            @if (!Product.ProductPrices.Any())
-                            {
-                                <p class="text-warning">No Size available yet...</p>
-                            }else
-                        {
-                                <div class="row pl-2">
-                                    <div class="col-2 text-primary"><h4>Count</h4></div>
-                                    <div class="col-10">
-                                        <Microsoft.AspNetCore.Components.Forms.InputNumber @bind-Value="DetailsVM.Count" class="form-control" />
-                                        <Microsoft.AspNetCore.Components.Forms.ValidationMessage For="()=>DetailsVM.Count"/>
+	<section>
+		<div class="container">
+			<div class="row">
+                <_CategoryComponent></_CategoryComponent>
+				<div class="col-sm-9 padding-right">
+                    <EditForm OnValidSubmit="AddToCart" Model="DetailsVM" method="post">
+                    <DataAnnotationsValidator />
+                        <div class="col-sm-9 padding-right">
+                            <div class="product-details">
+                                <!--product-details-->
+                                <div class="col-sm-5">
+                                    <div class="view-product">
+                                        <img src="@Product.ImageUrl" alt="" />
+                                        <h3>ZOOM</h3>
                                     </div>
                                 </div>
-                            }
-                            
+                                <div class="col-sm-7">
+                                    <div class="product-information">
+                                        <!--/product-information-->
+                                        <h2>@Product.Name</h2>
+                                        <p>Web ID: 1089772</p>
+                                        <div class="product-prices-row">
+                                            @foreach (var productPrice in Product.ProductPrices)
+                                            {
+                                                if (productPrice.ID == DetailsVM.SelectedProductPriceID)
+                                                {
+                                                    <div class="product-price selected">
+                                                        <p>@productPrice.Size</p>
+                                                        <p>@productPrice.Price.ToString("c")</p>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="product-price"
+                                                         @onclick="(agrs) =>SelectProductPrice(agrs,productPrice.ID)">
+                                                        <p>@productPrice.Size</p>
+                                                        <p>@productPrice.Price.ToString("c")</p>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                        @if (!Product.ProductPrices.Any())
+                                        {
+                                            <p class="text-warning">No Size available yet...</p>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-2 text-primary"><h4>Count</h4></div>
+                                            <div>
+                                                <InputNumber @bind-Value="DetailsVM.Count" class="form-control" />
+                                                <Microsoft.AspNetCore.Components.Forms.ValidationMessage For="()=>DetailsVM.Count" />
+
+                                            </div>
+                                        }
+                                        @if (DetailsVM.SelectedProductPriceID > 0)
+                                        {
+
+                                            <button type="submit" value="Add to Cart" class="btn btn-primary form-control"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" value="Add to Cart" disabled class="btn btn-primary form-control">Add to Cart</button>
+
+                                        }
+                                        <p><b>Availability:</b> In Stock</p>
+                                        <p><b>Condition:</b> New</p>
+                                        <p><b>Brand:</b> E-SHOPPER</p>
+                                        <a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
+                                    </div>
+                                    
 
 
+
+                                
+                                
+                            </div><!--/product-information-->
+                            </div>
                         </div>
-                        <div class="col-2">
-                            <img src="@Product.ImageUrl" width="100%" class="rounded" />
-                        </div>
 
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-12 col-md-6 pb-1">
-                            <a class="btn btn-success form-control " href="/">Back to Home</a>
-                        </div>
-                        <div class="col-12 col-md-6 pb-1">
-                            @if (DetailsVM.SelectedProductPriceID > 0)
-                            {
-                                <button type="submit" value="Add to Cart" class="btn btn-primary form-control">Add to Cart</button>
+                    </EditForm>>
+							</div><!--/product-details-->
+						</div>
 
-                            }
-                            else
-                            {
-                                <button type="submit" value="Add to Cart" disabled class="btn btn-primary form-control">Add to Cart</button>
+						
+					<!--category-tab-->
 
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </EditForm>
+
+			</div>
+	</section>
+
+	<style>
+		.product-prices-row {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+		}
+
+		.product-price {
+			border: 1px solid;
+			border-radius: 10px;
+			box-shadow: 5px 5px 10px #ccc;
+			padding: 5px;
+			width: 100px; /* Set a fixed width */
+			text-align: center;
+		}
+
+			.product-price.selected {
+				border: 3px solid #28A745;
+			}
+
+			.product-price p {
+				margin: 5px 0; /* Reduce margin for text */
+				font-size: 14px; /* Adjust font size as needed */
+			}
+	</style>
 }
 @code {
     [Parameter]

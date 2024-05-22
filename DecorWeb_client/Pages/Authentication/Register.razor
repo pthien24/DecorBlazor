@@ -1,0 +1,88 @@
+﻿@page "/registraton"
+@inject IAuthenticationService _authService
+@inject NavigationManager _navigation
+<section >
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="signup-form">
+                    <!--sign up form-->
+                    <h2>New User Signup!</h2>
+                    @if (ShowRegistrationErrors)
+                    {
+                        <ul>
+                            @foreach (var error in Errors)
+                            {
+                                <li>@error</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <h2>Not Errors</h2>
+                    }
+                    <EditForm Model="signUpModel" OnValidSubmit="RegisterUser">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <InputText id="name" class="form-control" @bind-Value="signUpModel.Name" />
+                            <ValidationMessage For="@(() => signUpModel.Name)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <InputText id="email" class="form-control" @bind-Value="signUpModel.Email" />
+                            <ValidationMessage For="@(() => signUpModel.Email)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number</label>
+                            <InputText id="phoneNumber" class="form-control" @bind-Value="signUpModel.PhoneNumber" />
+                            <ValidationMessage For="@(() => signUpModel.PhoneNumber)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <InputText id="password" type="password" class="form-control" @bind-Value="signUpModel.Password" />
+                            <ValidationMessage For="@(() => signUpModel.Password)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">ConfirmPassword</label>
+                            <InputText id="password" type="password" class="form-control" @bind-Value="signUpModel.ConfirmPassword" />
+                            <ValidationMessage For="@(() => signUpModel.ConfirmPassword)" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </EditForm>
+                </div><!--/sign up form-->
+            </div>
+        </div>
+    </div>
+</section><!--/form-->
+@code {
+    private SignUpRequestDTO signUpModel = new SignUpRequestDTO();
+    private bool IsProcessing { get; set; } = false;
+    private bool ShowRegistrationErrors { get; set; } = false;
+    public IEnumerable<string> Errors { get; set; } = new List<string>();
+    private async Task RegisterUser()
+    {
+        ShowRegistrationErrors = false;
+
+        IsProcessing = true;
+        var result = await _authService.RegisterUser(signUpModel);
+        if (result.IsRegisterationSuccessful)
+        {
+            //registion is successsfull
+            _navigation.NavigateTo("login");
+        }
+        else
+        {
+            //failure
+            Errors = result.Errors;
+            ShowRegistrationErrors = true;
+        }
+        IsProcessing = false;
+
+    }
+}

@@ -1,4 +1,5 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Decor_Common
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">DecorWeb_Server</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -56,10 +57,25 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Blazor JS
             </NavLink>
         </div>
+        <AuthorizeView Roles="@RoleAdmin">
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/Category">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Category
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/product">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Product
+                </NavLink>
+            </div>
+        </AuthorizeView>
+
     </nav>
 </div>
 
 @code {
+    private string RoleAdmin = SD.Role_Admin; 
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;

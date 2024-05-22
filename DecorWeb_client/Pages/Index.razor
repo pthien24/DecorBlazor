@@ -1,15 +1,73 @@
 ﻿@page "/"
 @inject IProductService _productService
+<AuthorizeView>
+    <Authorized>
+        <p>Welcome, @context.User.Identity.Name</p>
 
+    </Authorized>
+    <NotAuthorized>
+
+        <p>not Sign in !</p>
+
+    </NotAuthorized>
+</AuthorizeView>
 @if (IsProcessing)
 {
     <div style="position:fixed;top:50%;left:50%;margin-top:-50px;margin-left:-100px;">
         <img src="images/ajax-loader.gif" />
-    </div>
+	</div>
 }
 else
 {
-    <div class="container">
+	<!--/slider-->
+	<section>
+		<div class="container">
+			<div class="row">
+                <_CategoryComponent></_CategoryComponent>
+				<div class="col-sm-9 padding-right">
+					<div class="features_items">
+						<!--features_items-->
+						<h2 class="title text-center">Features Items</h2>
+
+						
+						@foreach (var product in Products)
+						{
+							<div class="col-sm-4">
+								<div class="product-image-wrapper">
+									<div class="single-products">
+										<div class="productinfo text-center">
+											<img src="@product.ImageUrl" alt="" />
+											<h2>$56</h2>
+											<p>Easy Polo Black Edition</p>
+											<a href="/details/@product.ID" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+										</div>
+										<div class="product-overlay">
+											<div class="overlay-content">
+												<h2>$56</h2>
+												<p>Easy Polo Black Edition</p>
+												<a href="/details/@product.ID" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+											</div>
+										</div>
+									</div>
+									<div class="choose">
+										<ul class="nav nav-pills nav-justified">
+											<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
+											<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						}
+					</div><!--features_items-->
+
+						<!--category-tab-->
+
+
+				</div>
+			</div>
+		</div>
+	</section>
+   @*  <div class="container">
         <div class="row  pb-3 pt-3 backgroundWhite">
             @foreach (var category in Products.Select(u => u.Category.Name).Distinct())
             {
@@ -48,7 +106,7 @@ else
                 }
                 }
         </div>
-    </div>
+    </div> *@
 }
 
 @code {

@@ -1,6 +1,9 @@
 ﻿@page "/product"
+@using Decor_Common
 @inject IProductRepository _productRepository
 @inject IJSRuntime _jsRuntime
+@inject NavigationManager _navigation
+
 <_DeleteComponent isParanComponentProcess="IsLoading" ConfirmDelete="ConfirmDelete_click"></_DeleteComponent>
 <div class="row mt-4">
     <div class="col-6">
@@ -72,6 +75,25 @@
     private IEnumerable<ProductDTO> products { get; set; } = new List<ProductDTO>();
     private bool IsLoading { get; set; } 
     public int DeleteProductId { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState{ get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            var uri = new Uri(_navigation.Uri);
+            _navigation.NavigateTo($"/identity/Account/login?returnUrl={uri.LocalPath}",forceLoad:true);
+        } 
+        else
+        {
+            if (!authState.User.IsInRole(SD.Role_Admin))
+            {
+                _navigation.NavigateTo("/ErrorPage", forceLoad: true);
+            }
+        }
+    }
     protected override async Task OnAfterRenderAsync(bool firstrender)
     {
         if (firstrender)

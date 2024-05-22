@@ -32,7 +32,7 @@ namespace DecorWeb_client.Service
                 }
             }
             await _localStorageService.SetItemAsync(SD.ShoppingCart, cart);
-            OnChange.Invoke();
+            OnChange?.Invoke();
         }
 
         public async Task IncrementCart(ShoppingCart cartToadd)
@@ -59,7 +59,7 @@ namespace DecorWeb_client.Service
                 });
             }
             await _localStorageService.SetItemAsync(SD.ShoppingCart, cart);
-            OnChange.Invoke();
+            OnChange?.Invoke();
         }
     }
 }

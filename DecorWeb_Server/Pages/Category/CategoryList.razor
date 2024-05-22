@@ -1,6 +1,8 @@
 ﻿@page "/category"
 @inject ICategoryRepository _categoryRepository
 @inject IJSRuntime _jsRuntime
+
+@attribute [Authorize]
 <_DeleteComponent isParanComponentProcess="IsLoading" ConfirmDelete="ConfirmDelete_click"></_DeleteComponent>
 <div class="row mt-4">
     <div class="col-6">

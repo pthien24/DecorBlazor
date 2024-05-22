@@ -1,5 +1,6 @@
 ﻿using Decor_Business.Repository.IRepository;
 using Decor_Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
