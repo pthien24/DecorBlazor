@@ -1,6 +1,7 @@
 ﻿using Decor_Models;
 using DecorWeb_client.Service.IService;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace DecorWeb_client.Service
 {
@@ -15,6 +16,25 @@ namespace DecorWeb_client.Service
             _configuration = configuration;
             BaseServerURL = _configuration.GetSection("BaseServerUrl").Value;
         }
+
+        public async Task<OrderDTO> Create(StripePaymentDTO Paymentdto)
+        {
+            var content = JsonConvert.SerializeObject(Paymentdto);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("api/Order/Create", bodyContent);
+
+            string responseResult = response.Content.ReadAsStringAsync().Result;
+            Console.WriteLine("Response order : " + responseResult);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JsonConvert.DeserializeObject<OrderDTO>(responseResult);
+                Console.WriteLine("result : " + result);
+
+                return result;
+            }
+            return new OrderDTO();
+        }
+
         public async Task<OrderDTO> Get(int id)
         {
             var respone = await _httpClient.GetAsync($"/api/order/{id}");
@@ -42,6 +62,25 @@ namespace DecorWeb_client.Service
                 return order;
             }
             return new List<OrderDTO>();
+        }
+
+        public async Task<OrderHeaderDTO> MarkPaymentSuccessfully(OrderHeaderDTO orderHeader)
+        {
+            var content = JsonConvert.SerializeObject(orderHeader);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("api/Order/PaymentSuccessfully", bodyContent);
+
+            string responseResult = response.Content.ReadAsStringAsync().Result;
+            Console.WriteLine("Response PaymentSuccessfully : " + responseResult);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = JsonConvert.DeserializeObject<OrderHeaderDTO>(responseResult);
+                Console.WriteLine("result PaymentSuccessfully : " + result);
+
+                return result;
+            }
+            var errModel = JsonConvert.DeserializeObject<ErrorModelDTO>(responseResult);
+            throw new Exception(errModel.ErrorMessage);
         }
     }
 }

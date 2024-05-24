@@ -1,0 +1,40 @@
+﻿@page "/OrderConfirmation"
+@inject IOrderService _orderService
+@inject ILocalStorageService _storage
+<section>
+    <div class="container">
+        @if (IsProcessing)
+        {
+            <div style="position:fixed;top:50%;left:50%;margin-top:-50px;margin-left:-100px;">
+                <img src="images/ajax-loader.gif" />
+            </div>
+        }
+        else
+        {
+            <div class="row mt-4 pt-4">
+                <div class="col-10 offset-1 text-center">
+                    <h2 class="text-warning">Order confired</h2>
+                    <p> your order been placed successfully with order id </p>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+@code {
+    private bool IsProcessing { get; set; } = false;
+    private OrderDTO order { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        IsProcessing = true;
+        order = await _storage.GetItemAsync<OrderDTO>(SD.Local_OrderDetails);
+        //add logic to payment and update status
+        var updataOrder = await _orderService.MarkPaymentSuccessfully(order.OrderHeader);
+        if (updataOrder.Status == SD.Status_Confirmed)
+        {
+            order.OrderHeader.Status = updataOrder.Status;
+            await _storage.RemoveItemAsync(SD.ShoppingCart);
+            await _storage.RemoveItemAsync(SD.Local_OrderDetails);
+        }
+        IsProcessing = false;
+    }
+}

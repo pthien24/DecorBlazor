@@ -10,7 +10,7 @@
 }
 else
 {
-    @if (ShoppingCart.Count == 0)
+    @if (ShoppingCart.Count == 0 || ShoppingCart == null)
 {
     <div>
         Giỏ hàng đang trống.
@@ -118,6 +118,12 @@ else
     {
         OrderTotal = 0;
         ShoppingCart = await _storage.GetItemAsync<List<ShoppingCart>>(SD.ShoppingCart);
+        if (ShoppingCart == null)
+        {
+            ShoppingCart = new List<ShoppingCart>();
+            return;
+        }
+
         foreach (var cart in ShoppingCart)
         {
             cart.Product = Products.FirstOrDefault(u => u.ID == cart.ProductId);

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -82,7 +83,7 @@ builder.Services.AddSwaggerGen(c =>
                        {
                          Type = ReferenceType.SecurityScheme,
                          Id = "Bearer"
-                       }
+                       }    
                       },
                       new string[] { }
                     }
@@ -90,7 +91,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
-
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["ApiKey"];
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 if (!app.Environment.IsDevelopment())
