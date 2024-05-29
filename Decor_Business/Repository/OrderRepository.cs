@@ -23,6 +23,36 @@ namespace Decor_Business.Repository
             _Db = db;
             _Mp = mp;
         }
+
+        public async Task<OrderHeaderDTO> CancelOrder(int orderId)
+        {
+
+            var orderHeader = await _Db.OrderHeader.FindAsync(orderId);
+            if (orderHeader == null) { 
+                return new OrderHeaderDTO();
+            }
+            if (orderHeader.Status ==SD.Status_Pending)
+            {
+                orderHeader.Status = SD.Status_Cancelled;
+                await _Db.SaveChangesAsync();
+            }
+            if (orderHeader.Status ==SD.Status_Confirmed)
+            {
+                var options = new Stripe.RefundCreateOptions
+                {
+                    Reason = Stripe.RefundReasons.RequestedByCustomer,
+                    PaymentIntent = orderHeader.PaymentIntentId,
+                };
+                var sevice = new Stripe.RefundService();
+                Stripe.Refund refund = sevice.Create(options);
+
+                orderHeader.Status = SD.Status_Refunded;
+                await _Db.SaveChangesAsync();
+            }
+            return _Mp.Map<OrderHeader, OrderHeaderDTO>(orderHeader);
+
+        }
+
         public async Task<OrderDTO> Create(OrderDTO ObjDTO)
         {
             try
@@ -106,7 +136,7 @@ namespace Decor_Business.Repository
 
         }
 
-        public async Task<OrderHeaderDTO> MarkPaymentSuccesfull(int Id)
+        public async Task<OrderHeaderDTO> MarkPaymentSuccesfull(int Id ,string payMentID )
         {
             var data = await _Db.OrderHeader.FindAsync(Id);
             if (data == null)
@@ -115,6 +145,7 @@ namespace Decor_Business.Repository
             }
             if (data.Status == SD.Status_Pending)
             {
+                data.PaymentIntentId = payMentID;
                 data.Status = SD.Status_Confirmed;
                 await _Db.SaveChangesAsync();
                 return _Mp.Map<OrderHeader, OrderHeaderDTO>(data);
@@ -126,10 +157,18 @@ namespace Decor_Business.Repository
         {
             if (orderHeader != null)
             {
-                var OrderHeader = _Mp.Map<OrderHeaderDTO, OrderHeader>(orderHeader);
-                _Db.OrderHeader.Update(OrderHeader);
+                var orderHeaderFormDB = _Db.OrderHeader.FirstOrDefault(u => u.Id == orderHeader.Id);
+                orderHeaderFormDB.Name = orderHeader.Name;
+                orderHeaderFormDB.PhoneNumber = orderHeader.PhoneNumber;
+                orderHeaderFormDB.Carrier = orderHeader.Carrier;
+                orderHeaderFormDB.Tracking = orderHeader.Tracking;
+                orderHeaderFormDB.StreetAddress = orderHeader.StreetAddress;
+                orderHeaderFormDB.City = orderHeader.City;
+                orderHeaderFormDB.State = orderHeader.State;
+                orderHeaderFormDB.PostalCode = orderHeader.PostalCode;
+                orderHeaderFormDB.Status = orderHeader.Status;
                 await _Db.SaveChangesAsync();
-                return _Mp.Map<OrderHeader ,OrderHeaderDTO>(OrderHeader);
+                return _Mp.Map<OrderHeader ,OrderHeaderDTO>(orderHeaderFormDB);
             }
             return new OrderHeaderDTO();
         }

@@ -1,0 +1,65 @@
+﻿@page "/order"
+@inject IOrderRepository _orderRepository
+@inject NavigationManager _navigation
+<div >
+    <h4 class="card-title text-info">Order List</h4>
+
+    @if (orderHeaderDTOs.Any())
+    {
+        <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" PageSize="10" AllowPaging="true" ColumnWidth="300px" AllowSorting="true"
+                    Data="orderHeaderDTOs" TItem="OrderHeaderDTO" LogicalFilterOperator="LogicalFilterOperator.Or">
+        <Columns>
+            <RadzenDataGridColumn TItem="OrderHeaderDTO" Property="Id" Filterable="false" Title="ID" Frozen="true" Width="80px" />
+
+                <RadzenDataGridColumn TItem="OrderHeaderDTO" Property="Name" Title="Name" Width="140px" />
+                <RadzenDataGridColumn TItem="OrderHeaderDTO" Property="Email" Title="Email" Width="140px" />
+                <RadzenDataGridColumn TItem="OrderHeaderDTO" Property="PhoneNumber" Title="PhoneNumber" Width="140px" />
+                <RadzenDataGridColumn TItem="OrderHeaderDTO" Property="OrderTotal" Title="OrderTotal" Width="140px" />
+                <RadzenDataGridColumn TItem="OrderHeaderDTO" Property="OrderDate" Title="OrderDate" Frozen="true" Width="140px" />
+                <RadzenDataGridColumn TItem="OrderHeaderDTO" Property="ShippingDate" Title="ShippingDate" Frozen="true" Width="140px" />
+                <RadzenDataGridColumn TItem="OrderHeaderDTO" Property="Status" Title="Status" Width="140px" />
+
+                <RadzenDataGridColumn TItem="OrderHeaderDTO" Title="Details" >
+                    <Template   Context="data">
+                        <RadzenButton Click="(args =>OrderDetails(data.Id))" Text="Details" ButtonStyle="ButtonStyle.Success"></RadzenButton>
+                    </Template>
+                </RadzenDataGridColumn>
+        </Columns>
+        </RadzenDataGrid>
+    }
+    else
+    {
+        if (IsLoading)
+        {
+            //loading gif
+            <div class="text-center">
+                <img src="/images/giphy.gif">
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private IEnumerable<OrderHeaderDTO> orderHeaderDTOs { get; set; } = new List<OrderHeaderDTO>();
+    private bool IsLoading { get; set; } = false;
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadData();
+        }
+    }
+    private async Task LoadData()
+    {
+        IsLoading = true;
+        StateHasChanged();
+        var order = await _orderRepository.GetAll();
+        orderHeaderDTOs = order.Select(u => u.OrderHeader);
+        IsLoading = false;
+        StateHasChanged();
+    }
+    private void OrderDetails(int id)
+    {
+        _navigation.NavigateTo("/order/details/" + id);
+    }
+}

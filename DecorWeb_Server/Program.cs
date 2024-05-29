@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.Blazor;
 using Microsoft.AspNetCore.Identity;
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzIzNDQwNUAzMjM1MmUzMDJlMzBrVzMydmRMUHRuVXdIU2VMeVh0b0E0TWFoL3VZeTl2a3FqcXhKR2JTNFFBPQ==");
+using Stripe;
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NBaF1cXmhPYVF+WmFZfVpgcV9EaFZSTGYuP1ZhSXxXdkBhUH9bcnxWT2dYVEA=");
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -31,6 +32,7 @@ builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProvide
     .AddEntityFrameworkStores<ApplicationDBContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["ApiKey"];
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

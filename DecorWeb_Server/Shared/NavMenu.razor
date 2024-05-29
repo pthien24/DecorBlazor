@@ -15,12 +15,12 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
+        @* <div class="nav-item px-3">
             <NavLink class="nav-link" href="counter">
                 <span class="oi oi-plus" aria-hidden="true"></span> Counter
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
+        </div> *@
+        @* <div class="nav-item px-3">
             <NavLink class="nav-link" href="fetchdata">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
@@ -56,7 +56,7 @@
             <NavLink class="nav-link" href="/learnblazor/blazorjs">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Blazor JS
             </NavLink>
-        </div>
+        </div> *@
         <AuthorizeView Roles="@RoleAdmin">
 
             <div class="nav-item px-3">
@@ -69,6 +69,12 @@
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Product
                 </NavLink>
             </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/order">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> order
+                </NavLink>
+            </div>
+            
         </AuthorizeView>
 
     </nav>

@@ -16,7 +16,8 @@ namespace Decor_Business.Repository.IRepository
 
         public Task<int> Delete(int id);
         public Task<OrderHeaderDTO> UpdateHeader(OrderHeaderDTO orderHeader);
-        public Task<OrderHeaderDTO> MarkPaymentSuccesfull(int Id);
+        public Task<OrderHeaderDTO> CancelOrder(int orderId);
+        public Task<OrderHeaderDTO> MarkPaymentSuccesfull(int Id, string payMentID);
         public Task<bool> UpdateOrderStatus(int orderId,string status);
 
     }
