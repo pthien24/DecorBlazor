@@ -2,6 +2,7 @@
 using Decor_Business.Repository.IRepository;
 using Decor_Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 
@@ -12,9 +13,12 @@ namespace DecorWeb.API.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
-        public OrderController(IOrderRepository orderRepository)
+        private readonly IEmailSender _emailSender;
+        public OrderController(IOrderRepository orderRepository,
+            IEmailSender emailSender) 
         {
             _orderRepository = orderRepository;
+            _emailSender = emailSender;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -64,6 +68,7 @@ namespace DecorWeb.API.Controllers
             if (sessionDetails.PaymentStatus== "paid" )
             {
                 var result = await _orderRepository.MarkPaymentSuccesfull(orderHeaderDTO.Id,sessionDetails.PaymentIntentId);
+                _emailSender.SendEmailAsync(orderHeaderDTO.Email, "Payment Successfully", "Your payment was successfully with order : "+orderHeaderDTO.Id);
                 if (result ==null)
                 {
                     return BadRequest(new ErrorModelDTO()
